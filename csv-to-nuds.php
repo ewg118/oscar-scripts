@@ -191,17 +191,19 @@ function generate_nuds($row, $count){
 					        $doc->endElement();
 					    }
 					} else {
-						$fromDate = intval(trim($row['Start Date']));
-						$toDate= intval(trim($row['End Date']));
-						
-						//only write date if both are integers
-						if (is_int($fromDate) && is_int($toDate)){
-						    $doc->startElement('date');
-						      $doc->writeAttribute('notBefore', number_pad($fromDate, 4));
-						      $doc->writeAttribute('notAfter', number_pad($toDate, 4));
-						      $doc->text(trim($row['Dat. (Text)']));
-						    $doc->endElement();
-						}
+					    if (is_numeric(trim($row['Start Date'])) && is_numeric(trim($row['End Date']))){
+					        $fromDate = intval(trim($row['Start Date']));
+					        $toDate= intval(trim($row['End Date']));
+					        
+					        //only write date if both are integers
+					        if (is_int($fromDate) && is_int($toDate)){
+					            $doc->startElement('date');
+    					            $doc->writeAttribute('notBefore', number_pad($fromDate, 4));
+    					            $doc->writeAttribute('notAfter', number_pad($toDate, 4));
+    					            $doc->text(trim($row['Dat. (Text)']));
+					            $doc->endElement();
+					        }
+					    }
 					}
 				}
 				
