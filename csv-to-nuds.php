@@ -196,15 +196,10 @@ function generate_nuds($row, $count){
 						
 						//only write date if both are integers
 						if (is_int($fromDate) && is_int($toDate)){
-						    $doc->startElement('dateRange');
-    						    $doc->startElement('fromDate');
-    						      $doc->writeAttribute('standardDate', number_pad($fromDate, 4));
-    						      $doc->text(get_date_textual($fromDate));
-    						    $doc->endElement();
-    						    $doc->startElement('toDate');
-    						      $doc->writeAttribute('standardDate', number_pad($toDate, 4));
-    						      $doc->text(get_date_textual($toDate));
-    						    $doc->endElement();
+						    $doc->startElement('date');
+						      $doc->writeAttribute('notBefore', number_pad($fromDate, 4));
+						      $doc->writeAttribute('notAfter', number_pad($toDate, 4));
+						      $doc->text(trim($row['Dat. (Text)']));
 						    $doc->endElement();
 						}
 					}
@@ -261,8 +256,8 @@ function generate_nuds($row, $count){
 				}*/
 				
 				
-				if (strlen($row['Material URI']) > 0){
-					$vals = explode('|', $row['Material URI']);
+				if (strlen($row['material 1 URI']) > 0){
+					$vals = explode('|', $row['material 1 URI']);
 					foreach ($vals as $val){
 						if (substr($val, -1) == '?'){
 							$uri = substr($val, 0, -1);
@@ -283,6 +278,30 @@ function generate_nuds($row, $count){
 							$doc->text($content['label']);
 						$doc->endElement();
 					}
+				}
+				
+				if (strlen($row['material 2 URI']) > 0){
+				    $vals = explode('|', $row['material 2 URI']);
+				    foreach ($vals as $val){
+				        if (substr($val, -1) == '?'){
+				            $uri = substr($val, 0, -1);
+				            $uncertainty = true;
+				            $content = processUri($uri);
+				        } else {
+				            $uri =  $val;
+				            $uncertainty = false;
+				            $content = processUri($uri);
+				        }
+				        
+				        $doc->startElement($content['element']);
+				        $doc->writeAttribute('xlink:type', 'simple');
+				        $doc->writeAttribute('xlink:href', $uri);
+				        if($uncertainty == true){
+				            $doc->writeAttribute('certainty', 'uncertain');
+				        }
+				        $doc->text($content['label']);
+				        $doc->endElement();
+				    }
 				}
 				
 				//authority
