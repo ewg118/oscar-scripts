@@ -10,6 +10,43 @@ $data = generate_json('https://docs.google.com/spreadsheets/d/e/2PACX-1vRkGPpZKs
 $nomismaUris = array();
 //$records = array();
 
+
+//create concordance arrays
+$concordance = array();
+//$records = array();
+
+foreach($data as $row){
+    $oscarID = $row['ID'];
+    
+    if (strlen($row["DT ID"]) > 0){
+        $pieces = explode('|', $row['DT ID']);
+        
+        foreach ($pieces as $id){
+            if (!array_key_exists($oscarID, $concordance)){                
+                $concordance[$oscarID][] = $id;
+            } else {
+                if (!in_array($id, $concordance[$oscarID])){
+                    $concordance[$oscarID][] = $id;
+                }
+            }
+        }
+    }
+    
+    if (strlen($row["NHMZ ID"]) > 0){
+        $pieces = explode('|', $row['NHMZ ID']);
+        
+        foreach ($pieces as $id){
+            if (!array_key_exists($oscarID, $concordance)){
+                $concordance[$oscarID][] = $id;
+            } else {
+                if (!in_array($id, $concordance[$oscarID])){
+                    $concordance[$oscarID][] = $id;
+                }
+            }
+        }
+    }
+}
+
 $count = 1;
 foreach($data as $row){
 	
@@ -22,7 +59,7 @@ foreach($data as $row){
 //functions
 function generate_nuds($row, $count){
 	
-	$uri_space = 'http://oscar.nationalmuseum.ch/id/';
+	$uri_space = 'https://oscar.nationalmuseum.ch/id/';
 	
 	$recordId = trim($row['ID']);
 	

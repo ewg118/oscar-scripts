@@ -12,12 +12,13 @@ $nhmz = array();
 //$records = array();
 
 foreach($data as $row){
+    $oscarID = $row['ID'];
+    
     if (strlen($row["DT ID"]) > 0){
         $pieces = explode('|', $row['DT ID']);
         
         foreach ($pieces as $id){
-            if (!array_key_exists($id, $dt)){
-                $oscarID = $row['ID'];
+            if (!array_key_exists($id, $dt)){                
                 $dt[$id][] = $oscarID;
             } else {
                 if (!in_array($oscarID, $dt[$id])){
@@ -32,7 +33,6 @@ foreach($data as $row){
         
         foreach ($pieces as $id){
             if (!array_key_exists($id, $nhmz)){
-                $oscarID = $row['ID'];
                 $nhmz[$id][] = $oscarID;
             } else {
                 if (!in_array($oscarID, $nhmz[$id])){
@@ -54,7 +54,7 @@ foreach ($nhmz as $k=>$v){
 //functions
 function generate_nuds($recordId, $array, $key){
 	
-	$uri_space = 'http://oscar.nationalmuseum.ch/id/';
+	$uri_space = 'https://oscar.nationalmuseum.ch/id/';
 	
 	
 	if (strlen($recordId) > 0){
