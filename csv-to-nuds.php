@@ -224,7 +224,7 @@ function generate_nuds($row, $count){
 					        $fromDate = intval(trim($row['Start Date']));					        
 					        $doc->startElement('date');
     					        $doc->writeAttribute('standardDate', number_pad($fromDate, 4));
-    					        $doc->text(get_date_textual($fromDate));
+    					        $doc->text(trim($row['Dat. (Text)']));
 					        $doc->endElement();
 					    }
 					} else {
